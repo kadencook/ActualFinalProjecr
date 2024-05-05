@@ -1,12 +1,15 @@
-// testbench to prove maximal LFSR
-module tb ();
+`timescale 1ns/1ps
+module stimulus ();
 
    //logic variables to route input and output to DUT
-
+  logic [63:0] seed
+  logic [63:0] shift_seed;
+  logic clk, reset;
    //create file handles to write results to a file
-   
+  integer handle3;
+  integer desc3;
    // instantiate device under test (small LFSR)
-
+  lfsr dut(seed, clk, reset, shift_seed);
    //set up a clock signal
    always     
      begin
@@ -16,27 +19,22 @@ module tb ();
    initial
      begin
 	//set up output file
-	//set up any book keeping variables you may want to use
-	//set up a starting seed.  What happens with all 0s?
-	//reset your DUT
-	//save the initial output of your DUT to compare with current output
-	//and see whenb you repeat
+  handle3 = $fopen("lsfr.out");
+  desc3 = handle3;
+     end
+    initial
+     begin
+     #0 reset = 1'b1;
+     #0 seed = 64'h0100;
+     #20 reset 1'b0;
      end
 
    always @(posedge clk)
      begin
-		//output your results to a file
+		$fdisplay(desc3, "%h || %h || %b" , seed, shift_seed, (seed == shift_seed));
      end
 
    // check results on falling edge of clk
-   always @(negedge clk) begin
-		if(~reset) begin
-		//check if your output equals the initial output 
-		//if so, report how many iterations it took to repeat
-		//this should be (2^n) - 1
-		//if the output never repeats for 2^n iterations, report that
-		end
-	end
    
 endmodule // tb
 

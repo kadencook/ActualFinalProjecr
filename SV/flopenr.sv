@@ -26,11 +26,11 @@
 `timescale 1ns / 1ps
 module flopenr #(parameter WIDTH = 8) (
   input  logic             clk, reset, en,
-  input  logic [WIDTH-1:0] d, 
+  input  logic [WIDTH-1:0] d,seed, 
   output logic [WIDTH-1:0] q);
 
   always_ff @(posedge clk)
-    if (reset)   q <= #1 0;
+    if (reset)   q <= #1 seed;
     else if (en) q <= #1 d;
 endmodule
 
